@@ -65,3 +65,5 @@ grow_vertical = 2
 placeholder_text = "Dialogue here..."
 emoji_menu_enabled = false
 scroll_fit_content_height = true
+
+[connection signal="item_selected" from="Label/OptionButton" to="." method="_on_option_button_item_selected"]

@@ -2,6 +2,7 @@ extends Control
 
 var node_prefab = load("res://Prefabs/dialogue_node.tscn")
 
+@export var save_path:String
 @export var actor_popup:ActorPopup
 @export var actor_data:ActorData
 @export var node_list:Array[GraphNode]
@@ -47,6 +48,20 @@ func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_n
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	$GraphEdit.disconnect_node(from_node,from_port,to_node,to_port)
 
+	var from_graph_node:DialogueNode
+	var to_graph_node:DialogueNode
+
+	for i in node_list.size():
+		if node_list[i].name == from_node:
+			from_graph_node = node_list[i]
+
+	for i in node_list.size():
+		if node_list[i].name == to_node:
+			to_graph_node = node_list[i]
+
+	if from_graph_node!=null and to_graph_node!=null:
+		from_graph_node.remove_connected_dialogue_id()
+		to_graph_node.remove_connected_dialogue_id()
 
 
 func is_node_name(current_node:GraphNode, node_name_to_compare:String) -> bool:
@@ -66,3 +81,33 @@ func _add_new_dialogue_node():
 	node_list.push_back(instance)
 
 	$GraphEdit.add_child(instance)
+
+
+func _export_dialogue():
+
+	var dialogue_arr:Array
+
+	var file = FileAccess.open(save_path + "dialogue.json",FileAccess.WRITE)
+	for index in node_list.size():
+		var dialogue_node = node_list[index] as DialogueNode
+
+		var raw_data:Dictionary ={
+			"dialogue_id" 				= "",
+			"actor_name"				= "",
+			"dialogue" 					= "",
+			"dialogue_connect_to_id" 	= ""
+		}
+		
+		raw_data.dialogue_id = dialogue_node.dialogue_id
+		raw_data.actor_name = dialogue_node.get_actor_name()
+		raw_data.dialogue =  dialogue_node.get_dialogue()
+		raw_data.dialogue_connect_to_id = dialogue_node.dialogue_connect_to_id
+
+		dialogue_arr.push_back(raw_data)
+	
+	var json_data = JSON.stringify(dialogue_arr,"\t",false) #No sort
+	file.store_line(json_data)
+	file.close()
+
+func _on_export_button_pressed() -> void:
+	_export_dialogue()
