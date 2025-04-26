@@ -1,0 +1,104 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck3eq2281m4ii"]
+
+[ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
+[ext_resource type="Resource" uid="uid://bgw3gx1t7y82r" path="res://Data/actor-data.tres" id="2_s6bd2"]
+[ext_resource type="Script" uid="uid://cyps1fn26jpa" path="res://Scripts/actor-popup.gd" id="2_sugue"]
+
+[node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p5dyo")
+actor_popup = NodePath("Control")
+actor_data = ExtResource("2_s6bd2")
+
+[node name="GraphEdit" type="GraphEdit" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+right_disconnects = true
+minimap_enabled = false
+
+[node name="AddNodeButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 32.0
+text = "Add Node"
+
+[node name="ActorButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 149.0
+offset_right = 299.0
+offset_bottom = 32.0
+text = "Actor"
+
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("input_box", "add_button")]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 451.0
+offset_top = 103.0
+offset_right = 691.0
+offset_bottom = 103.0
+script = ExtResource("2_sugue")
+input_box = NodePath("ActorPopup/Label/Actor-name-input")
+add_button = NodePath("ActorPopup/Label/Add-Actor-Button")
+
+[node name="ActorPopup" type="Panel" parent="Control"]
+layout_mode = 0
+offset_right = 245.0
+offset_bottom = 100.0
+
+[node name="CloseButton" type="Button" parent="Control/ActorPopup"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 35.0
+offset_bottom = 35.0
+text = "X"
+
+[node name="Label" type="Label" parent="Control/ActorPopup"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 43.0
+offset_right = 67.0
+offset_bottom = 66.0
+text = "Name:"
+
+[node name="Actor-name-input" type="LineEdit" parent="Control/ActorPopup/Label"]
+layout_mode = 0
+offset_left = 55.0
+offset_top = -2.0
+offset_right = 175.0
+offset_bottom = 29.0
+
+[node name="Add-Actor-Button" type="Button" parent="Control/ActorPopup/Label"]
+layout_mode = 1
+offset_left = 189.0
+offset_top = -2.0
+offset_right = 219.0
+offset_bottom = 29.0
+text = "+"
+
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 107.5
+offset_right = 246.0
+offset_bottom = 142.5
+
+[node name="Actor-name-container" type="VBoxContainer" parent="Control/PanelContainer"]
+layout_mode = 2
+
+[connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
+[connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
+[connection signal="pressed" from="AddNodeButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
+[connection signal="pressed" from="Control/ActorPopup/CloseButton" to="Control" method="_on_close_button_pressed"]

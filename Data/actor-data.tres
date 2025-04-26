@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ActorData" load_steps=2 format=3 uid="uid://bgw3gx1t7y82r"]
+
+[ext_resource type="Script" uid="uid://uyfegdh8rno8" path="res://Scripts/actor-data.gd" id="1_koinc"]
+
+[resource]
+script = ExtResource("1_koinc")
+actor_name_list = Array[String](["Mike", "Job", "Stephen"])
+metadata/_custom_type_script = "uid://uyfegdh8rno8"
