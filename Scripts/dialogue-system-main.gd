@@ -76,7 +76,7 @@ func _add_new_dialogue_node():
 
 	instance.initialize(dialogue_id, actor_data.actor_name_list)
 
-	node_dictionary[dialogue_id] = instance
+	node_dictionary[instance.name] = instance
 
 	$GraphEdit.add_child(instance)
 
@@ -86,7 +86,7 @@ func _add_dialogue_node(dialogue_id:String,actor_name:String,dialogue:String,con
 	
 	instance.fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
 
-	node_dictionary[dialogue_id] = instance
+	node_dictionary[instance.name] = instance
 
 	$GraphEdit.add_child(instance)	
 
