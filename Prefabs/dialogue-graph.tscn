@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p5dyo")
 save_path = "res://Data/"
-actor_popup = NodePath("Control")
+actor_popup = NodePath("Actor-control")
 actor_data = ExtResource("2_s6bd2")
 
 [node name="GraphEdit" type="GraphEdit" parent="."]
@@ -50,7 +50,14 @@ offset_bottom = 32.0
 grow_horizontal = 0
 text = "Export"
 
-[node name="Control" type="Control" parent="." node_paths=PackedStringArray("input_box", "add_button")]
+[node name="ImportButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 848.0
+offset_right = 998.0
+offset_bottom = 32.0
+text = "Import"
+
+[node name="Actor-control" type="Control" parent="." node_paths=PackedStringArray("input_box", "add_button")]
 layout_mode = 2
 anchors_preset = 0
 offset_left = 451.0
@@ -61,12 +68,12 @@ script = ExtResource("2_sugue")
 input_box = NodePath("ActorPopup/Label/Actor-name-input")
 add_button = NodePath("ActorPopup/Label/Add-Actor-Button")
 
-[node name="ActorPopup" type="Panel" parent="Control"]
+[node name="ActorPopup" type="Panel" parent="Actor-control"]
 layout_mode = 0
 offset_right = 245.0
 offset_bottom = 100.0
 
-[node name="CloseButton" type="Button" parent="Control/ActorPopup"]
+[node name="CloseButton" type="Button" parent="Actor-control/ActorPopup"]
 layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
@@ -74,7 +81,7 @@ offset_right = 35.0
 offset_bottom = 35.0
 text = "X"
 
-[node name="Label" type="Label" parent="Control/ActorPopup"]
+[node name="Label" type="Label" parent="Actor-control/ActorPopup"]
 layout_mode = 0
 offset_left = 16.0
 offset_top = 43.0
@@ -82,14 +89,14 @@ offset_right = 67.0
 offset_bottom = 66.0
 text = "Name:"
 
-[node name="Actor-name-input" type="LineEdit" parent="Control/ActorPopup/Label"]
+[node name="Actor-name-input" type="LineEdit" parent="Actor-control/ActorPopup/Label"]
 layout_mode = 0
 offset_left = 55.0
 offset_top = -2.0
 offset_right = 175.0
 offset_bottom = 29.0
 
-[node name="Add-Actor-Button" type="Button" parent="Control/ActorPopup/Label"]
+[node name="Add-Actor-Button" type="Button" parent="Actor-control/ActorPopup/Label"]
 layout_mode = 1
 offset_left = 189.0
 offset_top = -2.0
@@ -97,7 +104,7 @@ offset_right = 219.0
 offset_bottom = 29.0
 text = "+"
 
-[node name="PanelContainer" type="PanelContainer" parent="Control"]
+[node name="PanelContainer" type="PanelContainer" parent="Actor-control"]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 0
 offset_left = 1.0
@@ -105,12 +112,20 @@ offset_top = 107.5
 offset_right = 246.0
 offset_bottom = 142.5
 
-[node name="Actor-name-container" type="VBoxContainer" parent="Control/PanelContainer"]
+[node name="Actor-name-container" type="VBoxContainer" parent="Actor-control/PanelContainer"]
 layout_mode = 2
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*json")
 
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
 [connection signal="pressed" from="AddNodeButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
-[connection signal="pressed" from="Control/ActorPopup/CloseButton" to="Control" method="_on_close_button_pressed"]
+[connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

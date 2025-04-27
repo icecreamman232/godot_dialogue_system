@@ -7,11 +7,26 @@ class_name DialogueNode extends GraphNode
 @export var actor_name:String
 
 
-func initialize(actor_list:Array[String]):
-	dialogue_id = _get_id()
+func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String, connected_node_id:String):
+	name = "dialogue_node_" + id
+	dialogue_id = id
+	actor_name = actor
+	dialogue_connect_to_id = connected_node_id
+
+	for index in actor_list.size():
+		actor_list_button.add_item(actor_list[index])
+		if actor == actor_list[index]:
+			actor_list_button.selected = index
+
+
+	$DialogueLabel/Dialogue.text = dialogue
+
+func initialize(id:String, actor_list:Array[String]):
+	name = "dialogue_node_" + id
+	dialogue_id = id
 	for actor in actor_list:
 		actor_list_button.add_item(actor)
-		
+
 	#Default drop menu value will be at first item	
 	actor_name = actor_list_button.get_item_text(0)
 
@@ -23,19 +38,6 @@ func set_conneted_dialogue_id(id:String):
 func remove_connected_dialogue_id():
 	dialogue_connect_to_id = ""
 
-
-func _get_id() -> String:
-	var id = ""
-	var rand_prefix = randi() % 129
-	id += str(rand_prefix)
-
-	var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-	for i in range(0,10):
-		var rand_char_index = randi() % alphabet.length()
-		id += alphabet[rand_char_index]
-
-	return id
 
 func get_actor_name() -> String:
 	return actor_name
