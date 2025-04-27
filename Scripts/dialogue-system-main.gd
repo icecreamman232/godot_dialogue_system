@@ -36,10 +36,10 @@ func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_n
 	if node_dictionary.has(to_node):
 		to_graph_node = node_dictionary[to_node]
 
+	#Save connected node id in each other node
 	if from_graph_node!=null and to_graph_node!=null:
 		from_graph_node.set_conneted_dialogue_id(to_graph_node.dialogue_id)
 		to_graph_node.set_conneted_dialogue_id(from_graph_node.dialogue_id)
-
 
 
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
@@ -55,13 +55,10 @@ func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int,
 	if node_dictionary.has(to_node):
 		to_graph_node = node_dictionary[to_node]
 
+	#Remove connectd node id
 	if from_graph_node!=null and to_graph_node!=null:
 		from_graph_node.remove_connected_dialogue_id()
 		to_graph_node.remove_connected_dialogue_id()
-
-
-func is_node_name(current_node:GraphNode, node_name_to_compare:String) -> bool:
-	return current_node.name == node_name_to_compare
 
 
 func _on_actor_button_pressed() -> void:
@@ -142,7 +139,15 @@ func _import_json_file(json_raw:Array):
 		_add_dialogue_node(data.dialogue_id, data.actor_name, data.dialogue,data.dialogue_connect_to_id)
 
 func _set_connection_for_imported_node():
-	pass
+
+	for key in node_dictionary.keys():
+		var connected_id = node_dictionary[key].dialogue_connect_to_id
+		for other_key in node_dictionary.keys():
+			if node_dictionary[other_key].dialogue_id == connected_id:
+				var from_node:String = "dialogue_node_" + node_dictionary[key].dialogue_id
+				var to_node:String = "dialogue_node_" + node_dictionary[other_key].dialogue_id
+				if !$GraphEdit.is_node_connected(from_node,0,to_node,0) and !$GraphEdit.is_node_connected(to_node,0,from_node,0): 
+					$GraphEdit.connect_node(from_node,0,to_node,0)
 
 
 func _get_id() -> String:
