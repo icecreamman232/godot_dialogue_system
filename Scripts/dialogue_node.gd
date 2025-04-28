@@ -30,6 +30,7 @@ func initialize(id:String, actor_list:Array[String]):
 	#Default drop menu value will be at first item	
 	actor_name = actor_list_button.get_item_text(0)
 
+	
 
 func set_conneted_dialogue_id(id:String):
 	dialogue_connect_to_id = id
