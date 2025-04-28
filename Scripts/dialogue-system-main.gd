@@ -132,11 +132,18 @@ func _on_import_button_pressed() -> void:
 
 
 func _on_file_dialog_file_selected(path: String) -> void:
+	_clear_current_graph()
 	var file = FileAccess.open(path,FileAccess.READ)
 	var json_raw_text = JSON.parse_string(file.get_as_text())
 	_import_json_file(json_raw_text)
 	_set_connection_for_imported_node()
 
+func _clear_current_graph():
+	for key in node_dictionary.keys():
+		node_dictionary[key].queue_free()
+
+	node_dictionary.clear()
+	
 
 func _import_json_file(json_raw:Array):
 	for index in json_raw.size():
