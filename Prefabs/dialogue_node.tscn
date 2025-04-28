@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://8870v52f12g3"]
+[gd_scene load_steps=5 format=3 uid="uid://8870v52f12g3"]
 
+[ext_resource type="StyleBox" uid="uid://clmuxrxrxbx0p" path="res://Style-box/Dialogue-node-style/dialogue-node-title-style-box.tres" id="1_btp6u"]
 [ext_resource type="Script" uid="uid://dajujt6kce1de" path="res://Scripts/dialogue_node.gd" id="1_gxdp3"]
+[ext_resource type="StyleBox" uid="uid://blu64n7q0myhp" path="res://Style-box/Dialogue-node-style/dialogue-node-panel-style-box.tres" id="1_l1r58"]
+[ext_resource type="StyleBox" uid="uid://espaciuoa1j3" path="res://Style-box/Dialogue-node-style/dialogue-node-title-drag-style-box.tres" id="3_j6aq0"]
 
 [node name="DialogueNode" type="GraphNode" node_paths=PackedStringArray("actor_list_button")]
-custom_minimum_size = Vector2(300, 200)
+custom_minimum_size = Vector2(300, 250)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -12,10 +15,13 @@ anchor_bottom = 0.5
 offset_left = -125.0
 offset_top = -94.0
 offset_right = 175.0
-offset_bottom = 106.0
+offset_bottom = 156.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_stretch_ratio = 4.11
+theme_override_styles/panel = ExtResource("1_l1r58")
+theme_override_styles/titlebar = ExtResource("1_btp6u")
+theme_override_styles/titlebar_selected = ExtResource("3_j6aq0")
 title = "Dialogue Node"
 slot/0/left_enabled = true
 slot/0/left_type = 0
@@ -56,14 +62,20 @@ text = "Dialogue"
 
 [node name="Dialogue" type="TextEdit" parent="DialogueLabel"]
 custom_minimum_size = Vector2(150, 35)
-layout_mode = 2
-offset_left = -11.0
-offset_top = 27.0
-offset_right = 273.0
-offset_bottom = 110.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = 22.5
+offset_right = 137.0
+offset_bottom = 170.5
+grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "Dialogue here..."
 emoji_menu_enabled = false
-scroll_fit_content_height = true
+wrap_mode = 1
 
 [connection signal="item_selected" from="Label/OptionButton" to="." method="_on_option_button_item_selected"]
