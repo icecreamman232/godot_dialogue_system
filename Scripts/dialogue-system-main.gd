@@ -8,6 +8,9 @@ var node_prefab = load("res://Prefabs/dialogue_node.tscn")
 @export var node_dictionary:Dictionary
 
 
+const node_min_width:int = 300
+const node_min_height:int = 200
+
 func _ready() -> void:
 	actor_popup.disable_popup()
 	$GraphEdit.add_valid_connection_type(0,1)
@@ -77,9 +80,9 @@ func _add_new_dialogue_node():
 
 	$GraphEdit.add_child(instance)
 
-func _add_dialogue_node(dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
+func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
 	var instance = node_prefab.instantiate() as GraphNode
-	instance.position_offset =  $GraphEdit.get_local_mouse_position() + $GraphEdit.scroll_offset/$GraphEdit.zoom
+	instance.position_offset = spawn_position + $GraphEdit.scroll_offset/$GraphEdit.zoom
 	
 	instance.fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
 
@@ -97,12 +100,14 @@ func _export_dialogue():
 		var dialogue_node = node_dictionary[key] as DialogueNode
 
 		var raw_data:Dictionary ={
+			"internal_position"			= "",
 			"dialogue_id" 				= "",
 			"actor_name"				= "",
 			"dialogue" 					= "",
 			"dialogue_connect_to_id" 	= ""
 		}
 
+		raw_data.internal_position = str(dialogue_node.position.x) + "," + str(dialogue_node.position.y)
 		raw_data.dialogue_id = dialogue_node.dialogue_id
 		raw_data.actor_name = dialogue_node.get_actor_name()
 		raw_data.dialogue =  dialogue_node.get_dialogue()
@@ -136,7 +141,12 @@ func _on_file_dialog_file_selected(path: String) -> void:
 func _import_json_file(json_raw:Array):
 	for index in json_raw.size():
 		var data = json_raw[index]
-		_add_dialogue_node(data.dialogue_id, data.actor_name, data.dialogue,data.dialogue_connect_to_id)
+		
+		_add_dialogue_node(_json_string_to_vector2(data.internal_position) , 
+							data.dialogue_id, 
+							data.actor_name, 
+							data.dialogue,
+							data.dialogue_connect_to_id)
 
 func _set_connection_for_imported_node():
 
@@ -162,3 +172,7 @@ func _get_id() -> String:
 		id += alphabet[rand_char_index]
 
 	return id
+
+func _json_string_to_vector2(value:String) -> Vector2:
+	var arr = value.split(",")
+	return Vector2( float(arr[0]),float(arr[1]))

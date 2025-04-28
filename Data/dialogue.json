@@ -1,14 +1,16 @@
 [
 	{
-		"dialogue_id": "123grCTHffmZU",
+		"internal_position": "200.0,280.0",
+		"dialogue_id": "116CzOxpWfvIV",
 		"actor_name": "Stephen",
 		"dialogue": "1111",
-		"dialogue_connect_to_id": "22rLkBLnNHzF"
+		"dialogue_connect_to_id": "107hfDfPIVfNg"
 	},
 	{
-		"dialogue_id": "22rLkBLnNHzF",
+		"internal_position": "640.0,120.0",
+		"dialogue_id": "107hfDfPIVfNg",
 		"actor_name": "Mike",
-		"dialogue": "222",
-		"dialogue_connect_to_id": "123grCTHffmZU"
+		"dialogue": "22222",
+		"dialogue_connect_to_id": "116CzOxpWfvIV"
 	}
 ]

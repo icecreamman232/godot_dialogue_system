@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://ck3eq2281m4ii"]
+[gd_scene load_steps=10 format=3 uid="uid://ck3eq2281m4ii"]
 
 [ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
 [ext_resource type="Resource" uid="uid://bgw3gx1t7y82r" path="res://Data/actor-data.tres" id="2_s6bd2"]
 [ext_resource type="Script" uid="uid://cyps1fn26jpa" path="res://Scripts/actor-popup.gd" id="2_sugue"]
+[ext_resource type="StyleBox" uid="uid://cnuqnohebilqf" path="res://menu-style-box.tres" id="3_y7jgi"]
+[ext_resource type="StyleBox" uid="uid://8dw03d06sg13" path="res://menu-button-style-box-hover.tres" id="4_1egwd"]
+[ext_resource type="StyleBox" uid="uid://cp51kuacdsq6p" path="res://menu-button-style-box.tres" id="4_uoqss"]
+[ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://actor-popup-stylebox.tres" id="4_y376d"]
+[ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
+[ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
 
 [node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
 layout_mode = 3
@@ -24,20 +30,16 @@ anchor_bottom = 1.0
 offset_top = 32.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/menu_panel = ExtResource("3_y7jgi")
 right_disconnects = true
 minimap_enabled = false
 
-[node name="AddNodeButton" type="Button" parent="."]
+[node name="ActorButton" type="Button" parent="."]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 32.0
-text = "Add Node"
-
-[node name="ActorButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 149.0
-offset_right = 299.0
-offset_bottom = 32.0
+theme_override_styles/hover = ExtResource("4_1egwd")
+theme_override_styles/normal = ExtResource("4_uoqss")
 text = "Actor"
 
 [node name="ExportButton" type="Button" parent="."]
@@ -72,6 +74,7 @@ add_button = NodePath("ActorPopup/Label/Add-Actor-Button")
 layout_mode = 0
 offset_right = 245.0
 offset_bottom = 100.0
+theme_override_styles/panel = ExtResource("4_y376d")
 
 [node name="CloseButton" type="Button" parent="Actor-control/ActorPopup"]
 layout_mode = 0
@@ -79,6 +82,8 @@ offset_left = 3.0
 offset_top = 3.0
 offset_right = 35.0
 offset_bottom = 35.0
+theme_override_styles/hover = ExtResource("5_hk8mb")
+theme_override_styles/normal = ExtResource("5_b4x63")
 text = "X"
 
 [node name="Label" type="Label" parent="Actor-control/ActorPopup"]
@@ -123,7 +128,6 @@ filters = PackedStringArray("*json")
 
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
-[connection signal="pressed" from="AddNodeButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
