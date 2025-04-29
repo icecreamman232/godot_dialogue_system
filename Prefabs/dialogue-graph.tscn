@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ck3eq2281m4ii"]
+[gd_scene load_steps=12 format=3 uid="uid://ck3eq2281m4ii"]
 
 [ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
 [ext_resource type="Resource" uid="uid://bgw3gx1t7y82r" path="res://Data/actor-data.tres" id="2_s6bd2"]
@@ -10,8 +10,9 @@
 [ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://actor-popup-stylebox.tres" id="4_y376d"]
 [ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
 [ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
+[ext_resource type="Script" uid="uid://dsravrywrla57" path="res://Scripts/export-module.gd" id="11_t8hxd"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("actor_popup", "export_dialog", "export_file_dialog")]
+[node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,8 +22,6 @@ grow_vertical = 2
 script = ExtResource("1_p5dyo")
 actor_popup = NodePath("Actor-control")
 actor_data = ExtResource("2_s6bd2")
-export_dialog = NodePath("AcceptDialog")
-export_file_dialog = NodePath("ExportFileDialog")
 
 [node name="GraphEdit" type="GraphEdit" parent="."]
 layout_mode = 1
@@ -44,16 +43,6 @@ offset_bottom = 32.0
 theme_override_styles/hover = ExtResource("4_1egwd")
 theme_override_styles/normal = ExtResource("4_uoqss")
 text = "Actor"
-
-[node name="ExportButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -150.0
-offset_bottom = 32.0
-grow_horizontal = 0
-text = "Export"
 
 [node name="ImportButton" type="Button" parent="."]
 layout_mode = 0
@@ -129,14 +118,14 @@ ok_button_text = "Open"
 file_mode = 0
 filters = PackedStringArray("*json")
 
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
+[node name="ExportAcceptDialog" type="AcceptDialog" parent="."]
 title = "Export Dialog"
 position = Vector2i(426, 249)
 size = Vector2i(300, 150)
 content_scale_mode = 1
 content_scale_aspect = 1
 
-[node name="Label" type="Label" parent="AcceptDialog"]
+[node name="Label" type="Label" parent="ExportAcceptDialog"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -154,11 +143,33 @@ horizontal_alignment = 1
 [node name="ExportFileDialog" type="FileDialog" parent="."]
 position = Vector2i(256, 144)
 access = 2
+filters = PackedStringArray("*.json")
+
+[node name="ExportButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_bottom = 32.0
+grow_horizontal = 0
+text = "Export"
+
+[node name="Import-module" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Export-module" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_t8hxd")
 
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
-[connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
 [connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
 [connection signal="file_selected" from="ImportFileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]

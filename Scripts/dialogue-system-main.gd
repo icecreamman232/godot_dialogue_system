@@ -1,19 +1,20 @@
-extends Control
+class_name DialogueSystem extends Control
 
 var node_prefab = load("res://Prefabs/dialogue_node.tscn")
 
-#@export var save_path:String
+@onready var export_module:ExportModule = $"Export-module"
+
 @export var actor_popup:ActorPopup
 @export var actor_data:ActorData
-@export var export_dialog:AcceptDialog
-@export var export_file_dialog:FileDialog
 @export var node_dictionary:Dictionary
 
 
+signal on_finish_export
 
 func _ready() -> void:
-	export_file_dialog.confirmed.connect(_export_dialogue)
-	export_dialog.confirmed.connect(_on_confirm_export_dialog)
+	#Initialize EXPORT MODULE
+	export_module.on_save_button_pressed.connect(_export_dialogue)
+
 
 
 	actor_popup.disable_popup()
@@ -97,12 +98,10 @@ func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:St
 	$GraphEdit.add_child(instance)	
 
 #region Export To JSON
-func _export_dialogue():
-
-	var save_path = export_file_dialog.current_path
+func _export_dialogue(save_path:String):
 	var dialogue_arr:Array
 
-	var file = FileAccess.open(save_path + ".json",FileAccess.WRITE)
+	var file = FileAccess.open(save_path,FileAccess.WRITE)
 	for key in node_dictionary.keys():
 		var dialogue_node = node_dictionary[key] as DialogueNode
 
@@ -126,16 +125,8 @@ func _export_dialogue():
 	file.store_line(json_data)
 	file.close()
 
-	export_dialog.visible = true
-	export_dialog.get_child(0).text = "The dialogue has been saved to " + save_path + "dialogue.json"
+	on_finish_export.emit("The dialogue has been saved to " + save_path)
 
-
-
-func _on_export_button_pressed() -> void:
-	export_file_dialog.popup()
-
-func _on_confirm_export_dialog():
-	export_dialog.visible = false
 
 #endregion
 
