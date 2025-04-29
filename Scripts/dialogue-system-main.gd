@@ -24,6 +24,8 @@ func _ready() -> void:
 	graph.add_valid_connection_type(0,1)
 	graph.add_valid_left_disconnect_type(0)
 	graph.add_valid_right_disconnect_type(1)
+	graph.connection_request.connect(_on_graph_edit_connection_request)
+	graph.disconnection_request.connect(_on_graph_edit_disconnection_request)
 
 
 func _process(delta: float) -> void:
@@ -94,11 +96,10 @@ func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:St
 	var instance = node_prefab.instantiate() as GraphNode
 	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
 	
-	instance.fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
-
-	node_dictionary[instance.name] = instance
-
 	graph.add_child(instance)	
+
+	(instance as DialogueNode).fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
+	node_dictionary[instance.name] = instance
 
 #region Export To JSON
 func _export_dialogue(save_path:String):

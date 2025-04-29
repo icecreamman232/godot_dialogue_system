@@ -117,7 +117,8 @@ layout_mode = 2
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
-filters = PackedStringArray("*json")
+access = 2
+filters = PackedStringArray("*.json")
 
 [node name="ExportAcceptDialog" type="AcceptDialog" parent="."]
 title = "Export Dialog"
@@ -168,10 +169,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("11_t8hxd")
 
-[connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
-[connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
 [connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
-[connection signal="file_selected" from="ImportFileDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]

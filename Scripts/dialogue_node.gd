@@ -22,7 +22,7 @@ func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,
 	$DialogueLabel/Dialogue.text = dialogue
 
 func initialize(id:String, actor_list:Array[String]):
-	name = "dialogue_node_" + id
+	self.name = "dialogue_node_" + id
 	dialogue_id = id
 	for actor in actor_list:
 		actor_list_button.add_item(actor)
