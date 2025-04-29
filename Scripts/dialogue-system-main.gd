@@ -2,16 +2,20 @@ extends Control
 
 var node_prefab = load("res://Prefabs/dialogue_node.tscn")
 
-@export var save_path:String
+#@export var save_path:String
 @export var actor_popup:ActorPopup
 @export var actor_data:ActorData
+@export var export_dialog:AcceptDialog
+@export var export_file_dialog:FileDialog
 @export var node_dictionary:Dictionary
 
 
-const node_min_width:int = 300
-const node_min_height:int = 200
 
 func _ready() -> void:
+	export_file_dialog.confirmed.connect(_export_dialogue)
+	export_dialog.confirmed.connect(_on_confirm_export_dialog)
+
+
 	actor_popup.disable_popup()
 	$GraphEdit.add_valid_connection_type(0,1)
 	$GraphEdit.add_valid_left_disconnect_type(0)
@@ -80,6 +84,8 @@ func _add_new_dialogue_node():
 
 	$GraphEdit.add_child(instance)
 
+
+
 func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
 	var instance = node_prefab.instantiate() as GraphNode
 	instance.position_offset = spawn_position + $GraphEdit.scroll_offset/$GraphEdit.zoom
@@ -93,9 +99,10 @@ func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:St
 #region Export To JSON
 func _export_dialogue():
 
+	var save_path = export_file_dialog.current_path
 	var dialogue_arr:Array
 
-	var file = FileAccess.open(save_path + "dialogue.json",FileAccess.WRITE)
+	var file = FileAccess.open(save_path + ".json",FileAccess.WRITE)
 	for key in node_dictionary.keys():
 		var dialogue_node = node_dictionary[key] as DialogueNode
 
@@ -119,16 +126,23 @@ func _export_dialogue():
 	file.store_line(json_data)
 	file.close()
 
-func _on_export_button_pressed() -> void:
-	_export_dialogue()
+	export_dialog.visible = true
+	export_dialog.get_child(0).text = "The dialogue has been saved to " + save_path + "dialogue.json"
 
+
+
+func _on_export_button_pressed() -> void:
+	export_file_dialog.popup()
+
+func _on_confirm_export_dialog():
+	export_dialog.visible = false
 
 #endregion
 
 
 
 func _on_import_button_pressed() -> void:
-	$FileDialog.popup()
+	$ImportFileDialog.popup()
 
 
 func _on_file_dialog_file_selected(path: String) -> void:

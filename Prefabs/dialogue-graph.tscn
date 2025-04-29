@@ -11,7 +11,7 @@
 [ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
 [ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
+[node name="Main" type="Control" node_paths=PackedStringArray("actor_popup", "export_dialog", "export_file_dialog")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,9 +19,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p5dyo")
-save_path = "res://Data/"
 actor_popup = NodePath("Actor-control")
 actor_data = ExtResource("2_s6bd2")
+export_dialog = NodePath("AcceptDialog")
+export_file_dialog = NodePath("ExportFileDialog")
 
 [node name="GraphEdit" type="GraphEdit" parent="."]
 layout_mode = 1
@@ -122,11 +123,37 @@ offset_bottom = 142.5
 [node name="Actor-name-container" type="VBoxContainer" parent="Actor-control/PanelContainer"]
 layout_mode = 2
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="ImportFileDialog" type="FileDialog" parent="."]
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 filters = PackedStringArray("*json")
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+title = "Export Dialog"
+position = Vector2i(426, 249)
+size = Vector2i(300, 150)
+content_scale_mode = 1
+content_scale_aspect = 1
+
+[node name="Label" type="Label" parent="AcceptDialog"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -142.0
+offset_top = -67.0
+offset_right = 142.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "The dialogue has been saved to"
+horizontal_alignment = 1
+
+[node name="ExportFileDialog" type="FileDialog" parent="."]
+position = Vector2i(256, 144)
+access = 2
 
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
@@ -134,4 +161,4 @@ filters = PackedStringArray("*json")
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
 [connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="ImportFileDialog" to="." method="_on_file_dialog_file_selected"]
