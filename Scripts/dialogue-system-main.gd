@@ -3,6 +3,9 @@ class_name DialogueSystem extends Control
 var node_prefab = load("res://Prefabs/dialogue_node.tscn")
 
 @onready var export_module:ExportModule = $"Export-module"
+@onready var import_module:ImportModule = $"Import-module"
+@onready var graph:GraphEdit = $GraphEdit
+
 
 @export var actor_popup:ActorPopup
 @export var actor_data:ActorData
@@ -14,13 +17,13 @@ signal on_finish_export
 func _ready() -> void:
 	#Initialize EXPORT MODULE
 	export_module.on_save_button_pressed.connect(_export_dialogue)
-
+	import_module.on_import_file.connect(_on_file_dialog_file_selected)
 
 
 	actor_popup.disable_popup()
-	$GraphEdit.add_valid_connection_type(0,1)
-	$GraphEdit.add_valid_left_disconnect_type(0)
-	$GraphEdit.add_valid_right_disconnect_type(1)
+	graph.add_valid_connection_type(0,1)
+	graph.add_valid_left_disconnect_type(0)
+	graph.add_valid_right_disconnect_type(1)
 
 
 func _process(delta: float) -> void:
@@ -33,7 +36,7 @@ func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_n
 	#Prevent to connect 2 slots in same node
 	if from_node == to_node: return
 
-	$GraphEdit.connect_node(from_node,from_port,to_node,to_port)
+	graph.connect_node(from_node,from_port,to_node,to_port)
 
 	var from_graph_node:DialogueNode
 	var to_graph_node:DialogueNode
@@ -51,7 +54,7 @@ func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_n
 
 
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	$GraphEdit.disconnect_node(from_node,from_port,to_node,to_port)
+	graph.disconnect_node(from_node,from_port,to_node,to_port)
 
 	var from_graph_node:DialogueNode
 	var to_graph_node:DialogueNode
@@ -75,7 +78,7 @@ func _on_actor_button_pressed() -> void:
 
 func _add_new_dialogue_node():
 	var instance = node_prefab.instantiate() as GraphNode
-	instance.position_offset =  $GraphEdit.get_local_mouse_position() + $GraphEdit.scroll_offset/$GraphEdit.zoom
+	instance.position_offset = graph.get_local_mouse_position() + graph.scroll_offset/graph.zoom
 	
 	var dialogue_id = _get_id()
 
@@ -83,19 +86,19 @@ func _add_new_dialogue_node():
 
 	node_dictionary[instance.name] = instance
 
-	$GraphEdit.add_child(instance)
+	graph.add_child(instance)
 
 
 
 func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
 	var instance = node_prefab.instantiate() as GraphNode
-	instance.position_offset = spawn_position + $GraphEdit.scroll_offset/$GraphEdit.zoom
+	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
 	
 	instance.fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
 
 	node_dictionary[instance.name] = instance
 
-	$GraphEdit.add_child(instance)	
+	graph.add_child(instance)	
 
 #region Export To JSON
 func _export_dialogue(save_path:String):
@@ -132,10 +135,6 @@ func _export_dialogue(save_path:String):
 
 
 
-func _on_import_button_pressed() -> void:
-	$ImportFileDialog.popup()
-
-
 func _on_file_dialog_file_selected(path: String) -> void:
 	_clear_current_graph()
 	var file = FileAccess.open(path,FileAccess.READ)
@@ -168,8 +167,8 @@ func _set_connection_for_imported_node():
 			if node_dictionary[other_key].dialogue_id == connected_id:
 				var from_node:String = "dialogue_node_" + node_dictionary[key].dialogue_id
 				var to_node:String = "dialogue_node_" + node_dictionary[other_key].dialogue_id
-				if !$GraphEdit.is_node_connected(from_node,0,to_node,0) and !$GraphEdit.is_node_connected(to_node,0,from_node,0): 
-					$GraphEdit.connect_node(from_node,0,to_node,0)
+				if !graph.is_node_connected(from_node,0,to_node,0) and !graph.is_node_connected(to_node,0,from_node,0): 
+					graph.connect_node(from_node,0,to_node,0)
 
 
 func _get_id() -> String:

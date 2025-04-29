@@ -7,8 +7,6 @@ class_name ExportModule extends Control
 @export var last_save_path:String
 
 signal on_save_button_pressed(save_path:String)
-signal on_override_save(save_path:String)
-
 
 func _ready() -> void:
     export_button.pressed.connect(_on_export_button_pressed)

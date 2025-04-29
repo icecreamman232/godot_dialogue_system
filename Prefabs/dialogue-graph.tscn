@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ck3eq2281m4ii"]
+[gd_scene load_steps=13 format=3 uid="uid://ck3eq2281m4ii"]
 
 [ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
 [ext_resource type="Resource" uid="uid://bgw3gx1t7y82r" path="res://Data/actor-data.tres" id="2_s6bd2"]
@@ -10,6 +10,7 @@
 [ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://actor-popup-stylebox.tres" id="4_y376d"]
 [ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
 [ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
+[ext_resource type="Script" uid="uid://bjcc8x66vcx6s" path="res://Scripts/import_module.gd" id="11_a3dro"]
 [ext_resource type="Script" uid="uid://dsravrywrla57" path="res://Scripts/export-module.gd" id="11_t8hxd"]
 
 [node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
@@ -159,6 +160,7 @@ text = "Export"
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("11_a3dro")
 
 [node name="Export-module" type="Control" parent="."]
 anchors_preset = 0
