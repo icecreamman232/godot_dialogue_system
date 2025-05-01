@@ -1,10 +1,13 @@
 class_name DialogueSystem extends Control
 
-var node_prefab = load("res://Prefabs/dialogue_node.tscn")
+var dialogue_node_prefab = load("res://Prefabs/dialogue_node.tscn")
+var choice_node_prefab = load("res://Prefabs/choice_node.tscn")
+
 
 @onready var export_module:ExportModule = $"Export-module"
 @onready var import_module:ImportModule = $"Import-module"
 @onready var graph:GraphEdit = $GraphEdit
+@onready var right_click_menu:PanelContainer = $"Righ-click-menu"
 
 
 @export var actor_popup:ActorPopup
@@ -30,8 +33,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("right_mouse_press"):
-		_add_new_dialogue_node()
-
+		#add_new_dialogue_node()
+		right_click_menu.position = get_global_mouse_position()
 
 func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_node:StringName, to_port:int) ->void:
 
@@ -78,8 +81,8 @@ func _on_actor_button_pressed() -> void:
 	actor_popup.enable_popup()
 
 
-func _add_new_dialogue_node():
-	var instance = node_prefab.instantiate() as GraphNode
+func add_new_dialogue_node():
+	var instance = dialogue_node_prefab.instantiate() as GraphNode
 	instance.position_offset = graph.get_local_mouse_position() + graph.scroll_offset/graph.zoom
 	
 	var dialogue_id = _get_id()
@@ -93,13 +96,21 @@ func _add_new_dialogue_node():
 
 
 func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
-	var instance = node_prefab.instantiate() as GraphNode
+	var instance = dialogue_node_prefab.instantiate() as GraphNode
 	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
 	
 	graph.add_child(instance)	
 
 	(instance as DialogueNode).fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
 	node_dictionary[instance.name] = instance
+
+
+func add_choice_node():
+	var instance = choice_node_prefab.instantiate() as GraphNode
+	instance.position_offset = graph.get_local_mouse_position() + graph.scroll_offset/graph.zoom
+	
+	graph.add_child(instance)	
+
 
 #region Export To JSON
 func _export_dialogue(save_path:String):
