@@ -7,6 +7,10 @@ var container:VBoxContainer
 var actor_data:ActorData = load("res://Data/actor-data.tres")
 var actor_name_element_prefab = load("res://Prefabs/actor_name_container_element.tscn")
 
+signal on_add_new_actor(actor_list:Array[String])
+signal on_remove_actor(actor_list:Array[String])
+
+
 func _ready() -> void:
 	container = $PanelContainer.get_node("Actor-name-container")
 	input_box.text_submitted.connect(_submit_new_actor_name)
@@ -15,9 +19,10 @@ func _ready() -> void:
 func _submit_new_actor_name(new_text:String) -> void:
 	actor_data.actor_name_list.push_back(new_text)
 	_add_actor_name_to_container(new_text)
+
 	input_box.text = ""
 	ResourceSaver.save(actor_data,"res://Data/actor-data.tres")
-
+	on_add_new_actor.emit(actor_data.actor_name_list)
 
 func _on_close_button_pressed() -> void:
 	disable_popup()
@@ -61,6 +66,10 @@ func _on_remove_actor_name_element(element:ActorNameElement,actor_name:String):
 	#Try to remove the actor name
 	if index_to_remove != -1:
 		actor_data.actor_name_list.remove_at(index_to_remove)
+
+
+	on_remove_actor.emit(actor_data.actor_name_list)
+
 
 	ResourceSaver.save(actor_data,"res://Data/actor-data.tres")
 

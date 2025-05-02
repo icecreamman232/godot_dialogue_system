@@ -69,13 +69,7 @@ slot/4/right_color = Color(1, 1, 1, 1)
 slot/4/right_icon = null
 slot/4/draw_stylebox = true
 script = ExtResource("1_gxdp3")
-dialogue_id = null
-dialogue_connect_to_id = null
-choice_id_1 = null
-choice_id_2 = null
-choice_id_3 = null
 actor_list_button = NodePath("Label/OptionButton")
-actor_name = null
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
@@ -126,4 +120,5 @@ placeholder_text = "Dialogue here..."
 emoji_menu_enabled = false
 wrap_mode = 1
 
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="item_selected" from="Label/OptionButton" to="." method="_on_option_button_item_selected"]

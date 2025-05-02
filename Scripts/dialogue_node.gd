@@ -9,6 +9,11 @@ class_name DialogueNode extends GraphNode
 
 @export var actor_name:String
 
+func _on_tree_entered():
+	var actor_popup = get_node("../../Actor-control") as ActorPopup
+	actor_popup.on_add_new_actor.connect(_add_new_actor)
+	actor_popup.on_remove_actor.connect(_remove_actor)
+
 
 func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String, connected_node_id:String):
 	name = "dialogue_node_" + id
@@ -16,24 +21,50 @@ func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,
 	actor_name = actor
 	dialogue_connect_to_id = connected_node_id
 
+	_create_actor_option_list(actor_list)
+
 	for index in actor_list.size():
-		actor_list_button.add_item(actor_list[index])
 		if actor == actor_list[index]:
 			actor_list_button.selected = index
 
 
 	$DialogueLabel/Dialogue.text = dialogue
 
+
+
 func initialize(id:String, actor_list:Array[String]):
 	self.name = "dialogue_node_" + id
 	dialogue_id = id
-	for actor in actor_list:
-		actor_list_button.add_item(actor)
+	
+	_create_actor_option_list(actor_list)
 
 	#Default drop menu value will be at first item	
 	actor_name = actor_list_button.get_item_text(0)
 
-	
+
+func _add_new_actor(actor_list:Array[String]):
+	actor_list_button.clear()
+	_create_actor_option_list(actor_list)
+
+	#Set select actor back
+	for index in actor_list.size():
+		if actor_name == actor_list[index]:
+			actor_list_button.selected = index
+
+
+func _remove_actor(actor_list:Array[String]):
+	actor_list_button.clear()
+	_create_actor_option_list(actor_list)
+
+	#Set select actor back
+	for index in actor_list.size():
+		if actor_name == actor_list[index]:
+			actor_list_button.selected = index
+
+func _create_actor_option_list(actor_list:Array[String]):
+	for index in actor_list.size():
+		actor_list_button.add_item(actor_list[index])
+
 
 func set_conneted_dialogue_id(id:String):
 	dialogue_connect_to_id = id
@@ -99,5 +130,10 @@ func delete():
 	if choice_id_3!= "":
 		var choice_node_3 = parent_node.get_node("choice_node_" + choice_id_3) as ChoiceNode
 		choice_node_3.remove_input_dialogue()
+
+
+	var actor_popup = get_node("../../Actor-control") as ActorPopup
+	actor_popup.on_add_new_actor.disconnect(_add_new_actor)
+	actor_popup.on_remove_actor.disconnect(_remove_actor)
 
 	self.queue_free()

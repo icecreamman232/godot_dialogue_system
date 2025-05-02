@@ -176,7 +176,6 @@ func add_new_dialogue_node():
 	graph.add_child(instance)
 
 
-
 func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
 	var instance = dialogue_node_prefab.instantiate() as GraphNode
 	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
