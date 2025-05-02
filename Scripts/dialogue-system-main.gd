@@ -15,6 +15,11 @@ var choice_node_prefab = load("res://Prefabs/choice_node.tscn")
 @export var node_dictionary:Dictionary
 
 
+const DIALOGUE_CONNECTION_SLOT_LEFT_TYPE = 0
+const DIALOGUE_CONNECTION_SLOT_RIGHT_TYPE = 1
+const CHOICE_CONNECTION_SLOT_LEFT_TYPE = 2
+const CHOICE_CONNECTION_SLOT_RIGHT_TYPE = 3
+
 signal on_finish_export
 
 func _ready() -> void:
@@ -30,51 +35,118 @@ func _ready() -> void:
 	graph.connection_request.connect(_on_graph_edit_connection_request)
 	graph.disconnection_request.connect(_on_graph_edit_disconnection_request)
 
-
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("right_mouse_press"):
-		#add_new_dialogue_node()
-		right_click_menu.position = get_global_mouse_position()
+#region Connecting Nodes
 
 func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_node:StringName, to_port:int) ->void:
 
 	#Prevent to connect 2 slots in same node
 	if from_node == to_node: return
 
+	var from_node_object = graph.get_node("./" + from_node)
+	var to_node_object = graph.get_node("./" + to_node)
+
+	if from_node_object is DialogueNode:
+		if to_node_object is DialogueNode:
+			_connect_dialogue_node_to_dialogue_node(from_node,from_port,to_node,to_port)
+		else:
+			_connect_dialogue_node_to_choice_node(from_node,from_port,to_node,to_port)
+	else:
+		if to_node_object is DialogueNode:
+			_connect_choice_node_to_dialogue_node(from_node,from_port,to_node,to_port)
+
+
+
+func _connect_dialogue_node_to_choice_node(from_node:StringName, from_port:int, to_node:StringName, to_port:int):
+
 	graph.connect_node(from_node,from_port,to_node,to_port)
 
-	var from_graph_node:DialogueNode
-	var to_graph_node:DialogueNode
-
-	if node_dictionary.has(from_node):
-		from_graph_node = node_dictionary[from_node]
-
-	if node_dictionary.has(to_node):
-		to_graph_node = node_dictionary[to_node]
-
+	var from_node_object = graph.get_node("./" + from_node) as DialogueNode
+	var to_node_object = graph.get_node("./" + to_node) as ChoiceNode
+	
 	#Save connected node id in each other node
-	if from_graph_node!=null and to_graph_node!=null:
-		from_graph_node.set_conneted_dialogue_id(to_graph_node.dialogue_id)
-		to_graph_node.set_conneted_dialogue_id(from_graph_node.dialogue_id)
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.set_connect_choice_id(from_port,to_node_object.choice_id)
+		to_node_object.set_input_dialogue(from_node_object.dialogue_id)
 
 
+func _connect_choice_node_to_dialogue_node(from_node:StringName, from_port:int, to_node:StringName, to_port:int):
+
+	graph.connect_node(from_node,from_port,to_node,to_port)
+
+	var from_node_object = graph.get_node("./" + from_node) as ChoiceNode
+	var to_node_object = graph.get_node("./" + to_node) as DialogueNode
+	
+	#Save connected node id in each other node
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.set_output_dialogue(to_node_object.dialogue_id)
+		to_node_object.set_connect_choice_id(to_port,from_node_object.choice_id)
+
+
+func _connect_dialogue_node_to_dialogue_node(from_node:StringName, from_port:int,to_node:StringName, to_port:int):
+
+	graph.connect_node(from_node,from_port,to_node,to_port)
+
+	var from_node_object = graph.get_node("./" + from_node) as DialogueNode
+	var to_node_object = graph.get_node("./" + to_node) as DialogueNode
+	
+	#Save connected node id in each other node
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.set_conneted_dialogue_id(to_node_object.dialogue_id)
+		to_node_object.set_conneted_dialogue_id(from_node_object.dialogue_id)
+
+#endregion
+
+
+#region Disconnecting Nodes
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var from_node_object = graph.get_node("./" + from_node)
+	var to_node_object = graph.get_node("./" + to_node)
+
+	if from_node_object is DialogueNode:
+		if to_node_object is DialogueNode:
+			_disconnect_from_dialogue_node_to_dialogue_node(from_node,from_port,to_node,to_port)
+		else:
+			_disconnect_from_dialogue_node_to_choice_node(from_node,from_port,to_node,to_port)
+	else:
+		if to_node_object is DialogueNode:
+			_disconnect_from_choice_node_to_dialogue_node(from_node,from_port,to_node,to_port)
+	
+
+func _disconnect_from_dialogue_node_to_dialogue_node(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
+
 	graph.disconnect_node(from_node,from_port,to_node,to_port)
 
-	var from_graph_node:DialogueNode
-	var to_graph_node:DialogueNode
+	var from_node_object = graph.get_node("./" + from_node) as DialogueNode
+	var to_node_object = graph.get_node("./" + to_node) as DialogueNode
+
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.remove_connected_dialogue_id()
+		to_node_object.remove_connected_dialogue_id()
 
 
-	if node_dictionary.has(from_node):
-		from_graph_node = node_dictionary[from_node]
+func _disconnect_from_dialogue_node_to_choice_node(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
+	graph.disconnect_node(from_node,from_port,to_node,to_port)
 
-	if node_dictionary.has(to_node):
-		to_graph_node = node_dictionary[to_node]
+	var from_node_object = graph.get_node("./" + from_node) as DialogueNode
+	var to_node_object = graph.get_node("./" + to_node) as ChoiceNode
 
-	#Remove connectd node id
-	if from_graph_node!=null and to_graph_node!=null:
-		from_graph_node.remove_connected_dialogue_id()
-		to_graph_node.remove_connected_dialogue_id()
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.remove_connect_choice(from_port)
+		to_node_object.remove_input_dialogue()
+
+
+func _disconnect_from_choice_node_to_dialogue_node(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
+	graph.disconnect_node(from_node,from_port,to_node,to_port)
+
+	var from_node_object = graph.get_node("./" + from_node) as ChoiceNode
+	var to_node_object = graph.get_node("./" + to_node) as DialogueNode
+
+	if from_node_object!=null and to_node_object!=null:
+		from_node_object.remove_output_dialogue()
+		to_node_object.remove_connect_choice(to_port)
+
+#endregion
+
 
 
 func _on_actor_button_pressed() -> void:
@@ -109,8 +181,15 @@ func add_choice_node():
 	var instance = choice_node_prefab.instantiate() as GraphNode
 	instance.position_offset = graph.get_local_mouse_position() + graph.scroll_offset/graph.zoom
 	
-	graph.add_child(instance)	
+	var choice_id = _get_id()
 
+	(instance as ChoiceNode).initialize(choice_id)
+
+	node_dictionary[instance.name] = instance
+
+	
+	graph.add_child(instance)	
+	
 
 #region Export To JSON
 func _export_dialogue(save_path:String):

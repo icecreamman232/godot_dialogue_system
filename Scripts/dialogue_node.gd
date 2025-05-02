@@ -2,6 +2,9 @@ class_name DialogueNode extends GraphNode
 
 @export var dialogue_id:String
 @export var dialogue_connect_to_id:String
+@export var choice_id_1:String
+@export var choice_id_2:String
+@export var choice_id_3:String
 @export var actor_list_button:OptionButton
 
 @export var actor_name:String
@@ -39,6 +42,25 @@ func set_conneted_dialogue_id(id:String):
 func remove_connected_dialogue_id():
 	dialogue_connect_to_id = ""
 
+
+func set_connect_choice_id(index:int,id:String):
+	match index:
+		1:
+			choice_id_1 = id
+		2:
+			choice_id_2 = id
+		3:
+			choice_id_3 = id
+
+
+func remove_connect_choice(index:int):
+	match index:
+		1:
+			choice_id_1 = ""
+		2:
+			choice_id_2 = ""
+		3:
+			choice_id_3 = ""
 
 func get_actor_name() -> String:
 	return actor_name

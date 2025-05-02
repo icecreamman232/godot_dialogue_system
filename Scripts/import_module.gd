@@ -3,8 +3,6 @@ class_name ImportModule extends Control
 @onready var import_button:Button = $"../ImportButton"
 @onready var import_file_dialog:FileDialog = $"../ImportFileDialog"
 
-
-signal on_import_button_pressed
 signal on_import_file(file_path:String)
 
 

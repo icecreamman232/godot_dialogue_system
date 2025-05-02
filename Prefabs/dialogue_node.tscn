@@ -15,7 +15,7 @@ anchor_bottom = 0.5
 offset_left = -125.0
 offset_top = -109.0
 offset_right = 175.0
-offset_bottom = 101.0
+offset_bottom = 177.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = ExtResource("1_l1r58")
@@ -36,11 +36,38 @@ slot/1/left_enabled = false
 slot/1/left_type = 0
 slot/1/left_color = Color(1, 1, 1, 1)
 slot/1/left_icon = null
-slot/1/right_enabled = false
-slot/1/right_type = 0
+slot/1/right_enabled = true
+slot/1/right_type = 1
 slot/1/right_color = Color(1, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = true
+slot/2/right_type = 1
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = true
+slot/3/right_type = 1
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
 script = ExtResource("1_gxdp3")
 actor_list_button = NodePath("Label/OptionButton")
 
@@ -55,6 +82,21 @@ anchor_bottom = 1.0
 offset_left = 63.0
 offset_right = 271.0
 grow_vertical = 2
+
+[node name="Choice 1" type="Label" parent="."]
+layout_mode = 2
+text = "Choice 1"
+horizontal_alignment = 1
+
+[node name="Choice 2" type="Label" parent="."]
+layout_mode = 2
+text = "Choice 2"
+horizontal_alignment = 1
+
+[node name="Choice 3" type="Label" parent="."]
+layout_mode = 2
+text = "Choice 3"
+horizontal_alignment = 1
 
 [node name="DialogueLabel" type="Label" parent="."]
 layout_mode = 2
