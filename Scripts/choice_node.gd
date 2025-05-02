@@ -26,3 +26,20 @@ func remove_input_dialogue():
 
 func remove_output_dialogue():
     output_dialogue_id = ""
+
+
+func delete():
+
+    var graph = get_parent()
+    
+    if input_dialogue_id !="" :
+        var input_node = graph.get_node("dialogue_node_" + input_dialogue_id) as DialogueNode
+        input_node.remove_connect_by_name(choice_id)
+        remove_input_dialogue()
+    
+    if output_dialogue_id != "":
+        var output_node = graph.get_node("dialogue_node_" + output_dialogue_id) as DialogueNode
+        output_node.remove_connect_by_name(choice_id)
+        remove_output_dialogue()
+
+    self.queue_free()

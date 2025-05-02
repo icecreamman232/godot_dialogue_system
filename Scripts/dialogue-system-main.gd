@@ -14,6 +14,8 @@ var choice_node_prefab = load("res://Prefabs/choice_node.tscn")
 @export var actor_data:ActorData
 @export var node_dictionary:Dictionary
 
+var current_selected_node:GraphNode
+
 
 const DIALOGUE_CONNECTION_SLOT_LEFT_TYPE = 0
 const DIALOGUE_CONNECTION_SLOT_RIGHT_TYPE = 1
@@ -34,6 +36,14 @@ func _ready() -> void:
 	graph.add_valid_right_disconnect_type(1)
 	graph.connection_request.connect(_on_graph_edit_connection_request)
 	graph.disconnection_request.connect(_on_graph_edit_disconnection_request)
+	graph.node_selected.connect(_on_select_node)
+	graph.node_deselected.connect(_on_deselect_node)
+
+
+func _process(delta: float) -> void:
+	if Input.is_key_pressed(KEY_DELETE):
+		if current_selected_node!=null:
+			_delete_node(current_selected_node)
 
 #region Connecting Nodes
 
@@ -223,6 +233,18 @@ func _export_dialogue(save_path:String):
 
 
 #endregion
+
+
+func _delete_node(to_delete_node:Node):
+	node_dictionary.erase(to_delete_node.name)
+	to_delete_node.delete()
+
+func _on_select_node(select_node:Node):
+	current_selected_node = select_node	as GraphNode
+
+
+func _on_deselect_node(deselect_node:Node):
+	current_selected_node = null
 
 
 

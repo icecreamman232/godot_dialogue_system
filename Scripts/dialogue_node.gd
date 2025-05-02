@@ -62,6 +62,15 @@ func remove_connect_choice(index:int):
 		3:
 			choice_id_3 = ""
 
+
+func remove_connect_by_name(choice_node_name:String):
+	if choice_id_1 == choice_node_name:
+		choice_id_1 = ""
+	elif choice_id_2 == choice_node_name:
+		choice_id_2 = ""
+	elif choice_id_3 == choice_node_name:
+		choice_id_3 = ""
+
 func get_actor_name() -> String:
 	return actor_name
 
@@ -70,3 +79,25 @@ func get_dialogue() -> String:
 
 func _on_option_button_item_selected(index:int) -> void:
 	actor_name = actor_list_button.get_item_text(index)
+
+
+func delete():
+	var parent_node = get_parent()
+
+	if dialogue_connect_to_id != "":
+		var connect_dialogue_node = parent_node.get_node("dialogue_node_" + dialogue_connect_to_id) as DialogueNode
+		connect_dialogue_node.remove_connected_dialogue_id()
+
+	if choice_id_1!= "":
+		var choice_node_1 = parent_node.get_node("choice_node_" + choice_id_1) as ChoiceNode
+		choice_node_1.remove_input_dialogue()
+
+	if choice_id_2!= "":
+		var choice_node_2 = parent_node.get_node("choice_node_" + choice_id_2) as ChoiceNode
+		choice_node_2.remove_input_dialogue()
+	
+	if choice_id_3!= "":
+		var choice_node_3 = parent_node.get_node("choice_node_" + choice_id_3) as ChoiceNode
+		choice_node_3.remove_input_dialogue()
+
+	self.queue_free()
