@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ea5lvtvpugl5"]
 
-[ext_resource type="Script" uid="uid://dif7mekbvalud" path="res://Scripts/choice_node.gd" id="1_dub0m"]
+[ext_resource type="Script" uid="uid://dif7mekbvalud" path="res://Scripts/Node/choice_node.gd" id="1_dub0m"]
 
 [node name="ChoiceNode" type="GraphNode"]
 custom_minimum_size = Vector2(300, 150)
@@ -18,7 +18,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 title = "Choice Node"
 slot/0/left_enabled = true
-slot/0/left_type = 1
+slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
 slot/0/left_icon = null
 slot/0/right_enabled = true

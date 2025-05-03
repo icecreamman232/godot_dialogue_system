@@ -1,8 +1,5 @@
-class_name DialogueNode extends GraphNode
+class_name DialogueNode extends BaseNode
 
-
-@export var node_type:Helper.NODE_TYPE
-@export var dialogue_id:String
 @export var input_connect_id:String
 @export var output_connect_id:String
 @export var choice_id_1:String
@@ -22,8 +19,8 @@ func _on_tree_entered():
 
 
 func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,input_id:String, output_id:String, choice_1:String, choice_2:String, choice_3:String):
-	name = Helper.get_dialogue_node_name(id)
-	dialogue_id = id
+	name = Helper.get_node_name(id)
+	node_id = id
 	actor_name = actor
 	input_connect_id = input_id
 	output_connect_id = output_id
@@ -43,8 +40,8 @@ func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,
 
 
 func initialize(id:String, actor_list:Array[String]):
-	self.name = Helper.get_dialogue_node_name(id)
-	dialogue_id = id
+	self.name = Helper.get_node_name(id)
+	node_id = id
 	
 	_create_actor_option_list(actor_list)
 
@@ -75,12 +72,15 @@ func _create_actor_option_list(actor_list:Array[String]):
 	for index in actor_list.size():
 		actor_list_button.add_item(actor_list[index])
 
+func set_input_connect_id(id:String):
+	input_connect_id = id
 
-func set_conneted_dialogue_id(id:String):
+
+func set_output_connect_id(id:String):
 	output_connect_id = id
 
 
-func remove_connected_dialogue_id():
+func remove_output_connect_id():
 	output_connect_id = ""
 
 
@@ -114,8 +114,6 @@ func remove_connect_by_name(choice_node_name:String):
 	elif choice_id_3 == choice_node_name:
 		choice_id_3 = ""
 
-func get_actor_name() -> String:
-	return actor_name
 
 func get_dialogue() -> String:
 	return $DialogueLabel/Dialogue.text
@@ -124,23 +122,23 @@ func _on_option_button_item_selected(index:int) -> void:
 	actor_name = actor_list_button.get_item_text(index)
 
 
-func delete():
+func delete_node():
 	var parent_node = get_parent()
 
 	if output_connect_id != "":
-		var connect_dialogue_node = parent_node.get_node("dialogue_node_" + output_connect_id) as DialogueNode
-		connect_dialogue_node.remove_connected_dialogue_id()
+		var connect_dialogue_node = parent_node.get_node(Helper.get_node_name(output_connect_id)) as DialogueNode
+		connect_dialogue_node.remove_output_connect_id()
 
 	if choice_id_1!= "":
-		var choice_node_1 = parent_node.get_node("choice_node_" + choice_id_1) as ChoiceNode
+		var choice_node_1 = parent_node.get_node(Helper.get_node_name(choice_id_1)) as ChoiceNode
 		choice_node_1.remove_input_dialogue()
 
 	if choice_id_2!= "":
-		var choice_node_2 = parent_node.get_node("choice_node_" + choice_id_2) as ChoiceNode
+		var choice_node_2 = parent_node.get_node(Helper.get_node_name(choice_id_2)) as ChoiceNode
 		choice_node_2.remove_input_dialogue()
 	
 	if choice_id_3!= "":
-		var choice_node_3 = parent_node.get_node("choice_node_" + choice_id_3) as ChoiceNode
+		var choice_node_3 = parent_node.get_node(Helper.get_node_name(choice_id_3)) as ChoiceNode
 		choice_node_3.remove_input_dialogue()
 
 
@@ -151,14 +149,14 @@ func delete():
 	self.queue_free()
 
 
-func _setup_connection(graph:GraphEdit):
+func setup_connection(graph:GraphEdit):
 	if input_connect_id != "":
-		graph.connect_node(self.name,0,Helper.get_dialogue_node_name(input_connect_id), 0)
+		graph.connect_node(self.name,0,Helper.get_node_name(input_connect_id), 0)
 	if output_connect_id != "":
-		graph.connect_node(self.name,0,Helper.get_dialogue_node_name(output_connect_id), 0)
+		graph.connect_node(self.name,0,Helper.get_node_name(output_connect_id), 0)
 	if choice_id_1 != "":
-		graph.connect_node(self.name,1,Helper.get_dialogue_node_name(choice_id_1), 0)
+		graph.connect_node(self.name,1,Helper.get_node_name(choice_id_1), 0)
 	if choice_id_2 != "":
-		graph.connect_node(self.name,2,Helper.get_dialogue_node_name(choice_id_2), 0)
+		graph.connect_node(self.name,2,Helper.get_node_name(choice_id_2), 0)
 	if choice_id_3 != "":
-		graph.connect_node(self.name,3,Helper.get_dialogue_node_name(choice_id_2), 0)
+		graph.connect_node(self.name,3,Helper.get_node_name(choice_id_2), 0)

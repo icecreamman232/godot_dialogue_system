@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ck3eq2281m4ii"]
+[gd_scene load_steps=15 format=3 uid="uid://ck3eq2281m4ii"]
 
 [ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
 [ext_resource type="Resource" uid="uid://chasd5eawtj5h" path="res://Data/actor-data.tres" id="2_s6bd2"]
@@ -8,6 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://cp51kuacdsq6p" path="res://menu-button-style-box.tres" id="4_uoqss"]
 [ext_resource type="StyleBox" uid="uid://dx5knmannxcie" path="res://Style-box/Graph-board-style/graph-board-style-box.tres" id="4_y7jgi"]
 [ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://actor-popup-stylebox.tres" id="4_y376d"]
+[ext_resource type="PackedScene" uid="uid://b0nae3jyi1yqk" path="res://Prefabs/start_node.tscn" id="5_6fuu3"]
 [ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
 [ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
 [ext_resource type="Script" uid="uid://bjcc8x66vcx6s" path="res://Scripts/import_module.gd" id="11_a3dro"]
@@ -39,6 +40,15 @@ theme_override_styles/menu_panel = ExtResource("3_y7jgi")
 theme_override_styles/panel = ExtResource("4_y7jgi")
 right_disconnects = true
 minimap_enabled = false
+
+[node name="Start-node" parent="GraphEdit" instance=ExtResource("5_6fuu3")]
+layout_mode = 1
+offset_left = -440.0
+offset_top = -52.0
+offset_right = -348.0
+offset_bottom = 26.0
+mouse_filter = 1
+position_offset = Vector2(136, 256)
 
 [node name="ActorButton" type="Button" parent="."]
 layout_mode = 0
