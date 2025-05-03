@@ -40,5 +40,5 @@ func _on_create_dialogue_button_pressed():
 
 
 func _on_create_choice_button_pressed():
-    dialogue_system.add_choice_node()
+    dialogue_system.add_new_choice_node()
     _hide()

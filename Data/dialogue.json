@@ -1,16 +1,34 @@
 [
 	{
-		"internal_position": "287.0,217.0",
-		"dialogue_id": "7lLPlFIlMcV",
+		"internal_position": "40.0,180.0",
+		"node_type": 0,
+		"dialogue_id": "39REojWmxpOH",
 		"actor_name": "Job",
-		"dialogue": "111",
-		"dialogue_connect_to_id": "90EmtzPUIQaC"
+		"dialogue": "Dialogue 1",
+		"input_connect_id": "",
+		"output_connect_id": "",
+		"choice_id_1": "32FFcMzUGoKb",
+		"choice_id_2": "",
+		"choice_id_3": ""
 	},
 	{
-		"internal_position": "785.0,149.0",
-		"dialogue_id": "90EmtzPUIQaC",
-		"actor_name": "Mike",
-		"dialogue": "2222",
-		"dialogue_connect_to_id": "7lLPlFIlMcV"
+		"internal_position": "440.0,180.0",
+		"node_type": 1,
+		"choice_id": "32FFcMzUGoKb",
+		"input_dialogue_id": "39REojWmxpOH",
+		"output_dialogue_id": "93dtGuzPTzmZ",
+		"dialogue": "Choice 1"
+	},
+	{
+		"internal_position": "820.0,240.0",
+		"node_type": 0,
+		"dialogue_id": "93dtGuzPTzmZ",
+		"actor_name": "Stephen",
+		"dialogue": "Dialogue 2",
+		"input_connect_id": "32FFcMzUGoKb",
+		"output_connect_id": "",
+		"choice_id_1": "",
+		"choice_id_2": "",
+		"choice_id_3": ""
 	}
 ]

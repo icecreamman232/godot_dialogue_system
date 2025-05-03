@@ -1,16 +1,26 @@
 class_name ChoiceNode extends GraphNode
 
+@export var node_type:Helper.NODE_TYPE
 @export var choice_id:String
 @export var input_dialogue_id:String
 @export var output_dialogue_id:String
+@export var dialogue:String
 
 
-func initialize(id:String, input_dialogue:String = "", output_dialogue:String = ""):
+func _ready() -> void:
+    node_type = Helper.NODE_TYPE.CHOICE
+
+func initialize(id:String, input_dialogue:String = "", output_dialogue:String = "", _dialogue:String = ""):
     choice_id = id
-    name = "choice_node_" + choice_id
+    name = Helper.get_dialogue_node_name(id)
     input_dialogue_id = input_dialogue
     output_dialogue_id = output_dialogue
+    dialogue = _dialogue
 
+
+func get_dialogue() -> String:
+    dialogue = $Label/TextEdit.text
+    return dialogue
 
 func set_input_dialogue(id:String):
     input_dialogue_id = id
@@ -43,3 +53,7 @@ func delete():
         remove_output_dialogue()
 
     self.queue_free()
+
+
+func _setup_connection(graph:GraphEdit):
+    pass

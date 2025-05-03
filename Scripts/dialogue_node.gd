@@ -1,7 +1,10 @@
 class_name DialogueNode extends GraphNode
 
+
+@export var node_type:Helper.NODE_TYPE
 @export var dialogue_id:String
-@export var dialogue_connect_to_id:String
+@export var input_connect_id:String
+@export var output_connect_id:String
 @export var choice_id_1:String
 @export var choice_id_2:String
 @export var choice_id_3:String
@@ -9,17 +12,24 @@ class_name DialogueNode extends GraphNode
 
 @export var actor_name:String
 
+func _ready() -> void:
+	node_type = Helper.NODE_TYPE.DIALOGUE
+
 func _on_tree_entered():
 	var actor_popup = get_node("../../Actor-control") as ActorPopup
 	actor_popup.on_add_new_actor.connect(_add_new_actor)
 	actor_popup.on_remove_actor.connect(_remove_actor)
 
 
-func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String, connected_node_id:String):
-	name = "dialogue_node_" + id
+func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,input_id:String, output_id:String, choice_1:String, choice_2:String, choice_3:String):
+	name = Helper.get_dialogue_node_name(id)
 	dialogue_id = id
 	actor_name = actor
-	dialogue_connect_to_id = connected_node_id
+	input_connect_id = input_id
+	output_connect_id = output_id
+	choice_id_1 = choice_1
+	choice_id_2 = choice_2
+	choice_id_3 = choice_3
 
 	_create_actor_option_list(actor_list)
 
@@ -33,7 +43,7 @@ func fill_data(id:String,actor:String,actor_list:Array[String], dialogue:String,
 
 
 func initialize(id:String, actor_list:Array[String]):
-	self.name = "dialogue_node_" + id
+	self.name = Helper.get_dialogue_node_name(id)
 	dialogue_id = id
 	
 	_create_actor_option_list(actor_list)
@@ -67,15 +77,17 @@ func _create_actor_option_list(actor_list:Array[String]):
 
 
 func set_conneted_dialogue_id(id:String):
-	dialogue_connect_to_id = id
+	output_connect_id = id
 
 
 func remove_connected_dialogue_id():
-	dialogue_connect_to_id = ""
+	output_connect_id = ""
 
 
 func set_connect_choice_id(index:int,id:String):
 	match index:
+		0:
+			input_connect_id = id
 		1:
 			choice_id_1 = id
 		2:
@@ -115,8 +127,8 @@ func _on_option_button_item_selected(index:int) -> void:
 func delete():
 	var parent_node = get_parent()
 
-	if dialogue_connect_to_id != "":
-		var connect_dialogue_node = parent_node.get_node("dialogue_node_" + dialogue_connect_to_id) as DialogueNode
+	if output_connect_id != "":
+		var connect_dialogue_node = parent_node.get_node("dialogue_node_" + output_connect_id) as DialogueNode
 		connect_dialogue_node.remove_connected_dialogue_id()
 
 	if choice_id_1!= "":
@@ -137,3 +149,16 @@ func delete():
 	actor_popup.on_remove_actor.disconnect(_remove_actor)
 
 	self.queue_free()
+
+
+func _setup_connection(graph:GraphEdit):
+	if input_connect_id != "":
+		graph.connect_node(self.name,0,Helper.get_dialogue_node_name(input_connect_id), 0)
+	if output_connect_id != "":
+		graph.connect_node(self.name,0,Helper.get_dialogue_node_name(output_connect_id), 0)
+	if choice_id_1 != "":
+		graph.connect_node(self.name,1,Helper.get_dialogue_node_name(choice_id_1), 0)
+	if choice_id_2 != "":
+		graph.connect_node(self.name,2,Helper.get_dialogue_node_name(choice_id_2), 0)
+	if choice_id_3 != "":
+		graph.connect_node(self.name,3,Helper.get_dialogue_node_name(choice_id_2), 0)

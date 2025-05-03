@@ -68,21 +68,26 @@ func _on_graph_edit_connection_request(from_node:StringName, from_port:int, to_n
 
 func _connect_dialogue_node_to_choice_node(from_node:StringName, from_port:int, to_node:StringName, to_port:int):
 
-	graph.connect_node(from_node,from_port,to_node,to_port)
-
 	var from_node_object = graph.get_node("./" + from_node) as DialogueNode
 	var to_node_object = graph.get_node("./" + to_node) as ChoiceNode
 	
+	#Prevent connecting dialogue output port of dialogue node into choice node.
+	#It's supposed to connect choice output port of dialogue node into choice node.
+	var dialogue_output_port_type = from_node_object.get_output_port_type(from_port)
+	if dialogue_output_port_type == 0: return
+
+
 	#Save connected node id in each other node
 	if from_node_object!=null and to_node_object!=null:
 		from_node_object.set_connect_choice_id(from_port,to_node_object.choice_id)
 		to_node_object.set_input_dialogue(from_node_object.dialogue_id)
 
+	graph.connect_node(from_node,from_port,to_node,to_port)
+
 
 func _connect_choice_node_to_dialogue_node(from_node:StringName, from_port:int, to_node:StringName, to_port:int):
 
-	graph.connect_node(from_node,from_port,to_node,to_port)
-
+	
 	var from_node_object = graph.get_node("./" + from_node) as ChoiceNode
 	var to_node_object = graph.get_node("./" + to_node) as DialogueNode
 	
@@ -91,6 +96,8 @@ func _connect_choice_node_to_dialogue_node(from_node:StringName, from_port:int, 
 		from_node_object.set_output_dialogue(to_node_object.dialogue_id)
 		to_node_object.set_connect_choice_id(to_port,from_node_object.choice_id)
 
+
+	graph.connect_node(from_node,from_port,to_node,to_port)
 
 func _connect_dialogue_node_to_dialogue_node(from_node:StringName, from_port:int,to_node:StringName, to_port:int):
 
@@ -176,17 +183,17 @@ func add_new_dialogue_node():
 	graph.add_child(instance)
 
 
-func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,connected_node_id:String):
+func _add_dialogue_node(spawn_position:Vector2, dialogue_id:String,actor_name:String,dialogue:String,input_id:String, output_id:String, choice_1:String, choice_2:String, choice_3:String):
 	var instance = dialogue_node_prefab.instantiate() as GraphNode
 	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
 	
 	graph.add_child(instance)	
 
-	(instance as DialogueNode).fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue, connected_node_id)
+	(instance as DialogueNode).fill_data(dialogue_id, actor_name, actor_data.actor_name_list, dialogue,input_id, output_id,choice_1,choice_2,choice_3)
 	node_dictionary[instance.name] = instance
 
 
-func add_choice_node():
+func add_new_choice_node():
 	var instance = choice_node_prefab.instantiate() as GraphNode
 	instance.position_offset = graph.get_local_mouse_position() + graph.scroll_offset/graph.zoom
 	
@@ -198,38 +205,87 @@ func add_choice_node():
 
 	
 	graph.add_child(instance)	
+
+
+func add_new_choice_from_file(spawn_position:Vector2, choice_id:String, input_id:String,output_id:String,dialogue:String):
+	var instance = choice_node_prefab.instantiate() as GraphNode
+	instance.position_offset = spawn_position + graph.scroll_offset/graph.zoom
 	
+	(instance as ChoiceNode).initialize(choice_id, input_id, output_id, dialogue)
+
+	node_dictionary[instance.name] = instance
+
+	graph.add_child(instance)
+
 
 #region Export To JSON
 func _export_dialogue(save_path:String):
-	var dialogue_arr:Array
+	var data_array:Array
 
 	var file = FileAccess.open(save_path,FileAccess.WRITE)
 	for key in node_dictionary.keys():
-		var dialogue_node = node_dictionary[key] as DialogueNode
+		var data_node = node_dictionary[key]
 
-		var raw_data:Dictionary ={
-			"internal_position"			= "",
-			"dialogue_id" 				= "",
-			"actor_name"				= "",
-			"dialogue" 					= "",
-			"dialogue_connect_to_id" 	= ""
-		}
+		if data_node is DialogueNode:
+			var  raw_data = _export_raw_data_of_dialogue_node(data_node)
+			data_array.push_back(raw_data)
+		elif data_node is ChoiceNode:
+			var  raw_data = _export_raw_data_of_choice_node(data_node)
+			data_array.push_back(raw_data)
 
-		raw_data.internal_position = str(dialogue_node.position.x) + "," + str(dialogue_node.position.y)
-		raw_data.dialogue_id = dialogue_node.dialogue_id
-		raw_data.actor_name = dialogue_node.get_actor_name()
-		raw_data.dialogue =  dialogue_node.get_dialogue()
-		raw_data.dialogue_connect_to_id = dialogue_node.dialogue_connect_to_id
 
-		dialogue_arr.push_back(raw_data)
-	
-	var json_data = JSON.stringify(dialogue_arr,"\t",false) #No sort
+
+	var json_data = JSON.stringify(data_array,"\t",false) #No sort
 	file.store_line(json_data)
 	file.close()
 
 	on_finish_export.emit("The dialogue has been saved to " + save_path)
 
+
+func _export_raw_data_of_dialogue_node(dialogue_node:DialogueNode) -> Dictionary:
+	var raw_data:Dictionary ={
+			"internal_position"			= "",
+			"node_type"					= "",
+			"dialogue_id" 				= "",
+			"actor_name"				= "",
+			"dialogue" 					= "",
+			"input_connect_id" 			= "",
+			"output_connect_id" 		= "",
+			"choice_id_1"				= "",
+			"choice_id_2"				= "",
+			"choice_id_3"				= ""
+		}
+
+	raw_data.internal_position = str(dialogue_node.position.x) + "," + str(dialogue_node.position.y)
+	raw_data.node_type = dialogue_node.node_type
+	raw_data.dialogue_id = dialogue_node.dialogue_id
+	raw_data.actor_name = dialogue_node.get_actor_name()
+	raw_data.dialogue =  dialogue_node.get_dialogue()
+	raw_data.input_connect_id = dialogue_node.input_connect_id
+	raw_data.output_connect_id = dialogue_node.output_connect_id
+	raw_data.choice_id_1 =	dialogue_node.choice_id_1
+	raw_data.choice_id_1 =	dialogue_node.choice_id_1
+	raw_data.choice_id_1 =	dialogue_node.choice_id_1
+	return raw_data
+
+
+func _export_raw_data_of_choice_node(choice_node:ChoiceNode):
+	var raw_data:Dictionary ={
+			"internal_position"			= "",
+			"node_type"					= "",
+			"choice_id" 				= "",
+			"input_dialogue_id"			= "",
+			"output_dialogue_id" 		= "",
+			"dialogue"					= ""
+		}
+
+	raw_data.internal_position = str(choice_node.position.x) + "," + str(choice_node.position.y)
+	raw_data.node_type = choice_node.node_type
+	raw_data.choice_id = choice_node.choice_id
+	raw_data.input_dialogue_id = choice_node.input_dialogue_id
+	raw_data.output_dialogue_id =  choice_node.output_dialogue_id
+	raw_data.dialogue =  choice_node.get_dialogue()
+	return raw_data
 
 #endregion
 
@@ -265,22 +321,30 @@ func _import_json_file(json_raw:Array):
 	for index in json_raw.size():
 		var data = json_raw[index]
 		
-		_add_dialogue_node(_json_string_to_vector2(data.internal_position) , 
-							data.dialogue_id, 
-							data.actor_name, 
-							data.dialogue,
-							data.dialogue_connect_to_id)
+		match data.node_type as int:
+			0:
+				_add_dialogue_node(_json_string_to_vector2(data.internal_position) , 
+								data.dialogue_id, 
+								data.actor_name, 
+								data.dialogue,
+								data.input_connect_id,
+								data.output_connect_id,
+								data.choice_id_1,
+								data.choice_id_2,
+								data.choice_id_3)
+			1:
+				add_new_choice_from_file(_json_string_to_vector2(data.internal_position),
+										data.choice_id,
+										data.input_dialogue_id,
+										data.output_dialogue_id,
+										data.dialogue)
+
+
 
 func _set_connection_for_imported_node():
-
 	for key in node_dictionary.keys():
-		var connected_id = node_dictionary[key].dialogue_connect_to_id
-		for other_key in node_dictionary.keys():
-			if node_dictionary[other_key].dialogue_id == connected_id:
-				var from_node:String = "dialogue_node_" + node_dictionary[key].dialogue_id
-				var to_node:String = "dialogue_node_" + node_dictionary[other_key].dialogue_id
-				if !graph.is_node_connected(from_node,0,to_node,0) and !graph.is_node_connected(to_node,0,from_node,0): 
-					graph.connect_node(from_node,0,to_node,0)
+		node_dictionary[key]._setup_connection(graph)
+			
 
 
 func _get_id() -> String:
