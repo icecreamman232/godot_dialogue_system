@@ -1,19 +1,43 @@
 [
 	{
-		"graph_scroll_offset": "-854.471496582031,-277.593933105469",
-		"graph_zoom": 0.424097508192062,
-		"internal_position": "912.148742675781,386.162902832031",
+		"graph_scroll_offset": "-467.819458007813,-210.636016845703",
+		"graph_zoom": 0.350493788719177,
+		"internal_position": "515.486633300781,300.362426757813",
+		"internal_position_offset": "136.0,256.0",
 		"node_type": 0,
-		"node_id": "0YXVFihteQs",
-		"output_connect_id": "86TzYNbiQGYR"
+		"node_id": "72jzYSrYMAQT",
+		"output_connect_id": "13OVkgSXZrps"
 	},
 	{
-		"internal_position": "1107.65771484375,385.738800048828",
+		"internal_position": "586.987365722656,238.675521850586",
+		"internal_position_offset": "340.0,80.0",
 		"node_type": 1,
-		"node_id": "86TzYNbiQGYR",
+		"node_id": "13OVkgSXZrps",
 		"actor_name": "Job",
-		"dialogue": "",
-		"input_connect_id": "0YXVFihteQs",
+		"dialogue": "dia 1",
+		"input_connect_id": "72jzYSrYMAQT",
+		"output_connect_id": "",
+		"choice_id_1": "",
+		"choice_id_2": "123nyRmXbGikU",
+		"choice_id_3": ""
+	},
+	{
+		"internal_position": "727.184814453125,273.724914550781",
+		"internal_position_offset": "740.0,180.0",
+		"node_type": 2,
+		"node_id": "123nyRmXbGikU",
+		"input_dialogue_id": "13OVkgSXZrps",
+		"output_dialogue_id": "42VQhnHHzQXs",
+		"dialogue": "dia 2"
+	},
+	{
+		"internal_position": "593.997192382813,392.892791748047",
+		"internal_position_offset": "360.0,520.0",
+		"node_type": 1,
+		"node_id": "42VQhnHHzQXs",
+		"actor_name": "Stephen",
+		"dialogue": "test",
+		"input_connect_id": "123nyRmXbGikU",
 		"output_connect_id": "",
 		"choice_id_1": "",
 		"choice_id_2": "",

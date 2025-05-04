@@ -13,12 +13,10 @@ func initialize(id:String, input_dialogue:String = "", output_dialogue:String = 
     name = Helper.get_node_name(id)
     input_dialogue_id = input_dialogue
     output_dialogue_id = output_dialogue
-    dialogue = _dialogue
-
+    $Label/TextEdit.text = _dialogue
 
 func get_dialogue() -> String:
-    dialogue = $Label/TextEdit.text
-    return dialogue
+    return $Label/TextEdit.text
 
 func set_input_dialogue(id:String):
     input_dialogue_id = id

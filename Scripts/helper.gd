@@ -19,3 +19,7 @@ static func get_id() -> String:
         var rand_char_index = randi() % alphabet.length()
         id += alphabet[rand_char_index]
     return id
+
+static func json_string_to_vector2(value:String) -> Vector2:
+    var arr = value.split(",")
+    return Vector2(float(arr[0]), float(arr[1]))

@@ -38,7 +38,7 @@ func _on_export_file_dialog_confirm_pressed(path:String):
 
 ##Call when player press OK/Accept on confirm box after exporting done
 func _on_confirm_export(message:String):
-    export_confirm_popup.visible = true
+    #export_confirm_popup.popup()
     export_confirm_popup.get_child(0).text = message
 
 

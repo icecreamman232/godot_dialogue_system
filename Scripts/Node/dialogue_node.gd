@@ -150,8 +150,15 @@ func delete_node():
 
 
 func setup_connection(graph:GraphEdit):
+	var start_node = graph.get_node("Start-node") as StartNode
+
 	if input_connect_id != "":
-		graph.connect_node(self.name,0,Helper.get_node_name(input_connect_id), 0)
+		#Connect to start node
+		if start_node.node_id == input_connect_id:
+			graph.connect_node(start_node.name, 0, self.name, 0)
+		#Connect to other nodes
+		else:
+			graph.connect_node(Helper.get_node_name(input_connect_id), 0, self.name,0)	
 	if output_connect_id != "":
 		graph.connect_node(self.name,0,Helper.get_node_name(output_connect_id), 0)
 	if choice_id_1 != "":
