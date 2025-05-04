@@ -1,18 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://ck3eq2281m4ii"]
+[gd_scene load_steps=17 format=3 uid="uid://ck3eq2281m4ii"]
 
 [ext_resource type="Script" uid="uid://8q21rgjwydvc" path="res://Scripts/dialogue-system-main.gd" id="1_p5dyo"]
 [ext_resource type="Resource" uid="uid://chasd5eawtj5h" path="res://Data/actor-data.tres" id="2_s6bd2"]
 [ext_resource type="Script" uid="uid://cyps1fn26jpa" path="res://Scripts/actor-popup.gd" id="2_sugue"]
 [ext_resource type="StyleBox" uid="uid://cnuqnohebilqf" path="res://menu-style-box.tres" id="3_y7jgi"]
-[ext_resource type="StyleBox" uid="uid://8dw03d06sg13" path="res://menu-button-style-box-hover.tres" id="4_1egwd"]
-[ext_resource type="StyleBox" uid="uid://cp51kuacdsq6p" path="res://menu-button-style-box.tres" id="4_uoqss"]
+[ext_resource type="StyleBox" uid="uid://nckf4s7l0ykb" path="res://menu-button-style-box-hover.tres" id="4_1egwd"]
+[ext_resource type="StyleBox" uid="uid://bpjfwlspagj1q" path="res://menu-button-style-box.tres" id="4_uoqss"]
 [ext_resource type="StyleBox" uid="uid://dx5knmannxcie" path="res://Style-box/Graph-board-style/graph-board-style-box.tres" id="4_y7jgi"]
-[ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://actor-popup-stylebox.tres" id="4_y376d"]
+[ext_resource type="StyleBox" uid="uid://dg6clgi3suh66" path="res://Style-box/Actor-popup/actor-popup-stylebox.tres" id="4_y376d"]
 [ext_resource type="PackedScene" uid="uid://b0nae3jyi1yqk" path="res://Prefabs/start_node.tscn" id="5_6fuu3"]
 [ext_resource type="StyleBox" uid="uid://c5kow2k4u4tux" path="res://Close-button-style.tres" id="5_b4x63"]
 [ext_resource type="StyleBox" uid="uid://uoh3fnmhfnsv" path="res://close-button-style-hover.tres" id="5_hk8mb"]
 [ext_resource type="Script" uid="uid://bjcc8x66vcx6s" path="res://Scripts/import_module.gd" id="11_a3dro"]
 [ext_resource type="Script" uid="uid://dsravrywrla57" path="res://Scripts/export-module.gd" id="11_t8hxd"]
+[ext_resource type="StyleBox" uid="uid://dowfag7omigo4" path="res://Style-box/Actor-popup/actor-input-line-style.tres" id="12_v2kev"]
+[ext_resource type="StyleBox" uid="uid://ce8uvryyei86d" path="res://Style-box/Actor-popup/add-new-actor-button-style.tres" id="13_6th1m"]
 [ext_resource type="Script" uid="uid://n756534e8q02" path="res://Scripts/right_click_menu.gd" id="13_gjrog"]
 
 [node name="Main" type="Control" node_paths=PackedStringArray("actor_popup")]
@@ -33,6 +35,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 32.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -45,9 +48,9 @@ minimap_enabled = false
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 offset_left = -440.0
-offset_top = -52.0
+offset_top = -68.0
 offset_right = -340.0
-offset_bottom = 10.0
+offset_bottom = -6.0
 mouse_filter = 1
 position_offset = Vector2(136, 256)
 
@@ -64,7 +67,21 @@ layout_mode = 0
 offset_left = 848.0
 offset_right = 998.0
 offset_bottom = 32.0
+theme_override_styles/hover = ExtResource("4_1egwd")
+theme_override_styles/normal = ExtResource("4_uoqss")
 text = "Import"
+
+[node name="ExportButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_bottom = 32.0
+grow_horizontal = 0
+theme_override_styles/hover = ExtResource("4_1egwd")
+theme_override_styles/normal = ExtResource("4_uoqss")
+text = "Export"
 
 [node name="Actor-control" type="Control" parent="." node_paths=PackedStringArray("input_box", "add_button")]
 layout_mode = 3
@@ -90,16 +107,17 @@ offset_top = -7.0
 offset_right = 245.0
 offset_bottom = 25.0
 theme_override_styles/hover = ExtResource("5_hk8mb")
+theme_override_styles/pressed = ExtResource("5_b4x63")
 theme_override_styles/normal = ExtResource("5_b4x63")
 text = "X"
 
 [node name="Label" type="Label" parent="Actor-control/ActorPopup"]
 layout_mode = 0
-offset_left = 16.0
-offset_top = 43.0
-offset_right = 67.0
-offset_bottom = 66.0
-text = "Name:"
+offset_left = 13.0
+offset_top = 41.0
+offset_right = 64.0
+offset_bottom = 64.0
+text = "Name"
 
 [node name="Actor-name-input" type="LineEdit" parent="Actor-control/ActorPopup/Label"]
 layout_mode = 0
@@ -107,6 +125,10 @@ offset_left = 55.0
 offset_top = -2.0
 offset_right = 175.0
 offset_bottom = 29.0
+theme_override_styles/focus = ExtResource("12_v2kev")
+theme_override_styles/normal = ExtResource("12_v2kev")
+caret_blink = true
+caret_blink_interval = 0.3
 
 [node name="Add-Actor-Button" type="Button" parent="Actor-control/ActorPopup/Label"]
 layout_mode = 1
@@ -114,6 +136,7 @@ offset_left = 189.0
 offset_top = -2.0
 offset_right = 219.0
 offset_bottom = 29.0
+theme_override_styles/normal = ExtResource("13_6th1m")
 text = "+"
 
 [node name="PanelContainer" type="PanelContainer" parent="Actor-control"]
@@ -161,16 +184,6 @@ position = Vector2i(256, 144)
 access = 2
 filters = PackedStringArray("*.json")
 
-[node name="ExportButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -150.0
-offset_bottom = 32.0
-grow_horizontal = 0
-text = "Export"
-
 [node name="Import-module" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
@@ -206,5 +219,5 @@ text = "Create choice node"
 
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
-[connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
+[connection signal="pressed" from="Actor-control/ActorPopup/CloseButton" to="Actor-control" method="_on_close_button_pressed"]
