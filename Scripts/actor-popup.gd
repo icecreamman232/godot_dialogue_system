@@ -14,9 +14,19 @@ signal on_remove_actor(actor_list:Array[String])
 func _ready() -> void:
 	container = $PanelContainer.get_node("Actor-name-container")
 	input_box.text_submitted.connect(_submit_new_actor_name)
+	add_button.pressed.connect(_add_button_pressed)
 
+
+func _add_button_pressed():
+	if input_box.text == "": return
+	_submit_new_actor_name(input_box.text)
 
 func _submit_new_actor_name(new_text:String) -> void:
+
+	for actor_name in actor_data.actor_name_list:
+		if actor_name == new_text:
+			return
+
 	actor_data.actor_name_list.push_back(new_text)
 	_add_actor_name_to_container(new_text)
 
