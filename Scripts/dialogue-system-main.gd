@@ -341,6 +341,7 @@ func _import_start_node(spawn_position:Vector2, spawn_position_offset:Vector2, n
 	graph.zoom = graph_zoom
 	start_node.position = spawn_position
 	start_node.position_offset = spawn_position_offset
+	node_dictionary[start_node.name] = start_node
 
 
 func _import_dialogue_node(spawn_position:Vector2,spawn_position_offset:Vector2, node_id:String,actor_name:String,dialogue:String,input_id:String, output_id:String, choice_1:String, choice_2:String, choice_3:String):

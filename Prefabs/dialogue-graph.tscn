@@ -196,12 +196,12 @@ layout_mode = 2
 [node name="dialogue-node-button" type="Button" parent="Righ-click-menu/Control"]
 layout_mode = 2
 action_mode = 0
-text = "Dialogue Node"
+text = "Create dialogue node"
 
 [node name="choice-node-button" type="Button" parent="Righ-click-menu/Control"]
 layout_mode = 2
 action_mode = 0
-text = "Choice Node"
+text = "Create choice node"
 
 [connection signal="pressed" from="ActorButton" to="." method="_on_actor_button_pressed"]
 [connection signal="pressed" from="ImportButton" to="." method="_on_import_button_pressed"]
