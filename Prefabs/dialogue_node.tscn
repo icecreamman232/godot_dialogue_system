@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://8870v52f12g3"]
 
-[ext_resource type="StyleBox" uid="uid://clmuxrxrxbx0p" path="res://Style-box/Dialogue-node-style/dialogue-node-title-style-box.tres" id="1_btp6u"]
+[ext_resource type="StyleBox" uid="uid://clmuxrxrxbx0p" path="res://Style-box/Dialogue-node/dialogue-node-title-style-box.tres" id="1_btp6u"]
 [ext_resource type="Script" uid="uid://dajujt6kce1de" path="res://Scripts/Node/dialogue_node.gd" id="1_gxdp3"]
-[ext_resource type="StyleBox" uid="uid://blu64n7q0myhp" path="res://Style-box/Dialogue-node-style/dialogue-node-panel-style-box.tres" id="1_l1r58"]
-[ext_resource type="StyleBox" uid="uid://espaciuoa1j3" path="res://Style-box/Dialogue-node-style/dialogue-node-title-drag-style-box.tres" id="3_j6aq0"]
+[ext_resource type="StyleBox" uid="uid://blu64n7q0myhp" path="res://Style-box/node-panel-style.tres" id="1_l1r58"]
+[ext_resource type="StyleBox" uid="uid://espaciuoa1j3" path="res://Style-box/Dialogue-node/dialogue-node-title-drag-style-box.tres" id="3_j6aq0"]
 
 [node name="DialogueNode" type="GraphNode" node_paths=PackedStringArray("actor_list_button")]
 custom_minimum_size = Vector2(300, 210)

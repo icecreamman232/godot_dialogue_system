@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ea5lvtvpugl5"]
+[gd_scene load_steps=5 format=3 uid="uid://ea5lvtvpugl5"]
 
+[ext_resource type="StyleBox" uid="uid://blu64n7q0myhp" path="res://Style-box/node-panel-style.tres" id="1_cuk6b"]
 [ext_resource type="Script" uid="uid://dif7mekbvalud" path="res://Scripts/Node/choice_node.gd" id="1_dub0m"]
+[ext_resource type="StyleBox" uid="uid://dhoho0b7vjpxm" path="res://Style-box/Choice-node/choice-node-title-style.tres" id="1_j3r61"]
+[ext_resource type="StyleBox" uid="uid://htd8f1mpqk7y" path="res://Style-box/Choice-node/choice-node-select-title-style.tres" id="2_ka35d"]
 
 [node name="ChoiceNode" type="GraphNode"]
 custom_minimum_size = Vector2(300, 150)
@@ -16,6 +19,10 @@ offset_bottom = 91.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("1_cuk6b")
+theme_override_styles/panel_selected = ExtResource("1_cuk6b")
+theme_override_styles/titlebar = ExtResource("1_j3r61")
+theme_override_styles/titlebar_selected = ExtResource("2_ka35d")
 title = "Choice Node"
 slot/0/left_enabled = true
 slot/0/left_type = 0
@@ -35,8 +42,8 @@ vertical_alignment = 1
 
 [node name="TextEdit" type="TextEdit" parent="Label"]
 layout_mode = 0
-offset_left = -6.0
+offset_left = -1.0
 offset_top = 30.0
-offset_right = 274.0
+offset_right = 279.0
 offset_bottom = 110.0
 placeholder_text = "Message.."

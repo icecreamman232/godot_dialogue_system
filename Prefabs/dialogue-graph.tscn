@@ -42,11 +42,12 @@ right_disconnects = true
 minimap_enabled = false
 
 [node name="Start-node" parent="GraphEdit" instance=ExtResource("5_6fuu3")]
+custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 offset_left = -440.0
 offset_top = -52.0
-offset_right = -348.0
-offset_bottom = 26.0
+offset_right = -340.0
+offset_bottom = 10.0
 mouse_filter = 1
 position_offset = Vector2(136, 256)
 
